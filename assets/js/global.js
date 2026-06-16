@@ -123,6 +123,128 @@
     });
 })();
 
+// Lightbox functionality
+class Lightbox {
+    constructor() {
+        this.images = [];
+        this.currentIndex = 0;
+        this.overlay = null;
+        this.container = null;
+        this.img = null;
+        this.closeBtn = null;
+        this.prevBtn = null;
+        this.nextBtn = null;
+    }
+
+    init() {
+        this.createLightboxElements();
+        this.collectImages();
+        this.attachImageListeners();
+        this.attachOverlayListeners();
+    }
+
+    createLightboxElements() {
+        // Create overlay
+        this.overlay = document.createElement("div");
+        this.overlay.className = "lightbox-overlay";
+
+        // Create container
+        this.container = document.createElement("div");
+        this.container.className = "lightbox-container";
+
+        // Create image
+        this.img = document.createElement("img");
+        this.img.className = "lightbox-image";
+
+        // Create close button
+        this.closeBtn = document.createElement("button");
+        this.closeBtn.className = "lightbox-close";
+        this.closeBtn.textContent = "×";
+        this.closeBtn.addEventListener("click", () => this.close());
+
+        // Create navigation buttons
+        this.prevBtn = document.createElement("button");
+        this.prevBtn.className = "lightbox-nav prev";
+        this.prevBtn.textContent = "❮";
+        this.prevBtn.addEventListener("click", () => this.prev());
+
+        this.nextBtn = document.createElement("button");
+        this.nextBtn.className = "lightbox-nav next";
+        this.nextBtn.textContent = "❯";
+        this.nextBtn.addEventListener("click", () => this.next());
+
+        // Assemble
+        this.container.appendChild(this.img);
+        this.container.appendChild(this.closeBtn);
+        this.container.appendChild(this.prevBtn);
+        this.container.appendChild(this.nextBtn);
+        this.overlay.appendChild(this.container);
+        document.body.appendChild(this.overlay);
+    }
+
+    collectImages() {
+        // Collect all images except those that are already links or have class 'no-lightbox'
+        document.querySelectorAll("img").forEach((img) => {
+            if (!img.closest("a") && !img.classList.contains("no-lightbox")) {
+                this.images.push(img.src);
+            }
+        });
+    }
+
+    attachImageListeners() {
+        document.querySelectorAll("img").forEach((img) => {
+            if (!img.closest("a") && !img.classList.contains("no-lightbox")) {
+                img.style.cursor = "pointer";
+                img.addEventListener("click", () => {
+                    const index = this.images.indexOf(img.src);
+                    if (index !== -1) {
+                        this.currentIndex = index;
+                        this.open();
+                    }
+                });
+            }
+        });
+    }
+
+    attachOverlayListeners() {
+        this.overlay.addEventListener("click", (e) => {
+            if (e.target === this.overlay) {
+                this.close();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener("keydown", (e) => {
+            if (!this.overlay.classList.contains("active")) return;
+
+            if (e.key === "Escape") this.close();
+            if (e.key === "ArrowLeft") this.prev();
+            if (e.key === "ArrowRight") this.next();
+        });
+    }
+
+    open() {
+        this.img.src = this.images[this.currentIndex];
+        this.overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    close() {
+        this.overlay.classList.remove("active");
+        document.body.style.overflow = "auto";
+    }
+
+    prev() {
+        this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+        this.img.src = this.images[this.currentIndex];
+    }
+
+    next() {
+        this.currentIndex = (this.currentIndex + 1) % this.images.length;
+        this.img.src = this.images[this.currentIndex];
+    }
+}
+
 // other
 async function loadComponent(elementId, file) {
     const container = document.getElementById(elementId);
@@ -168,6 +290,10 @@ document.addEventListener(
 
         initializeSearch();
         initializeTOC();
+        
+        // Initialize lightbox
+        const lightbox = new Lightbox();
+        lightbox.init();
     }
 );
 
