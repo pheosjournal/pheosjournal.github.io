@@ -1,10 +1,12 @@
 :root {
-    /* Colors */
-    --border: #a2a9b1;
-    --background: #f8f9fa;
-    --content-bg: #ffffff;
-    --link: #0645ad;
-    --link-hover: #0b0080;
+    /* Colors - Dark Mode */
+    --border: #2d2f31;
+    --background: #0f1012;
+    --content-bg: #181a1b;
+    --link: #58a6ff;
+    --link-hover: #79c0ff;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
     
     /* Typography */
     --font-serif: "Linux Libertine", "Linux Libertine O", serif;
@@ -26,18 +28,22 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    background: var(--background);
+    color: var(--text-primary);
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
-    color: #333;
+    color: var(--text-primary);
+    background: var(--background);
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
     margin-top: 0;
+    color: var(--text-primary);
 }
 
 * {
@@ -74,6 +80,7 @@ a:focus {
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
+    color: var(--text-primary);
 }
 
 .container {
@@ -115,7 +122,7 @@ a:focus {
 
 .article-meta {
     margin-bottom: var(--spacing-xs);
-    color: #666;
+    color: var(--text-secondary);
     font-size: 0.875rem;
 }
 
@@ -123,6 +130,7 @@ a:focus {
     border: 1px solid var(--border);
     padding: var(--spacing-md);
     margin-top: var(--spacing-md);
+    background: var(--background);
 }
 
 .toc {
@@ -155,6 +163,7 @@ a:focus {
 .infobox td {
     border: 1px solid var(--border);
     padding: var(--spacing-xs);
+    color: var(--text-primary);
 }
 
 .infobox img {
@@ -181,6 +190,103 @@ a:focus {
     padding: var(--spacing-md);
     text-align: center;
     background: var(--content-bg);
+    color: var(--text-primary);
+}
+
+/* Lightbox Styles */
+.lightbox-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lightbox-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.lightbox-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    animation: lightboxFadeIn 0.3s ease;
+}
+
+@keyframes lightboxFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s ease;
+    z-index: 10000;
+}
+
+.lightbox-close:hover {
+    color: #ccc;
+}
+
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 10px 20px;
+    line-height: 1;
+    transition: background 0.2s ease;
+    z-index: 10000;
+}
+
+.lightbox-nav:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-nav.prev {
+    left: 20px;
+}
+
+.lightbox-nav.next {
+    right: 20px;
 }
 
 @media (max-width: 900px) {
@@ -203,6 +309,25 @@ a:focus {
         width: 100%;
         margin-left: 0;
     }
+
+    .lightbox-close {
+        top: 10px;
+        right: 10px;
+        font-size: 30px;
+    }
+
+    .lightbox-nav {
+        padding: 8px 16px;
+        font-size: 30px;
+    }
+
+    .lightbox-nav.prev {
+        left: 10px;
+    }
+
+    .lightbox-nav.next {
+        right: 10px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -218,5 +343,9 @@ a:focus {
     .content,
     .article-content {
         padding: var(--spacing-md);
+    }
+
+    .lightbox-image {
+        max-height: 70vh;
     }
 }
