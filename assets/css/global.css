@@ -93,10 +93,21 @@ a:focus {
     width: var(--sidebar-width);
     border-right: 1px solid var(--border);
     flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar {
     padding: var(--spacing-lg);
+}
+
+.sidebar h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .sidebar ul {
@@ -105,6 +116,19 @@ a:focus {
 
 .sidebar li {
     margin-bottom: var(--spacing-sm);
+}
+
+.sidebar a {
+    display: block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.sidebar a:hover {
+    background: rgba(88, 166, 255, 0.1);
+    padding-left: calc(var(--spacing-sm) + 4px);
+    text-decoration: none;
 }
 
 .content,
@@ -298,9 +322,16 @@ a:focus {
         flex-direction: column;
     }
 
-    .sidebar {
+    #sidebar-container {
         width: 100%;
         border-right: none;
+        border-bottom: 1px solid var(--border);
+        position: static;
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
         border-bottom: 1px solid var(--border);
     }
 
